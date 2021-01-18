@@ -4,6 +4,8 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -11,10 +13,16 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import com.luka.trackerapp.AdminUser;
 import com.luka.trackerapp.model.Category;
 import com.luka.trackerapp.model.Expense;
+import com.luka.trackerapp.model.Role;
+import com.luka.trackerapp.model.User;
 import com.luka.trackerapp.service.CategoryService;
 import com.luka.trackerapp.service.ExpenseService;
+import com.luka.trackerapp.service.UserService;
+
+// expenseorigin
 
 @Controller
 public class ExpenseController {
@@ -25,9 +33,15 @@ public class ExpenseController {
 	@Autowired
 	private CategoryService categoryService;
 	
+	@Autowired
+	private UserService userService;
+	
 	@GetMapping("/expenses")
-	public String expensePage(Model model) {
-		List<Expense> expenseList = expenseService.findAll();
+	public String expensePage(Model model, HttpServletRequest request) {
+		
+		User user = userService.findByName(request.getUserPrincipal().getName());
+		
+		List<Expense> expenseList = expenseService.findByUser(user);
 		model.addAttribute("expenseList", expenseList);
 		
 		double totalSum = 0;
@@ -37,12 +51,13 @@ public class ExpenseController {
 		totalSum = Math.round(totalSum * 100.0) / 100.0;
 		model.addAttribute("totalSum", totalSum);
 		
-	
+		model.addAttribute("admin", AdminUser.isAdmin(user));
+		model.addAttribute("userFirstName", user.getFirstName());
 		return "expense";
 	}
 	
 	@GetMapping("/addExpense")
-	public String showExpenseForm(Model model) {
+	public String showExpenseForm(Model model, HttpServletRequest request) {
 		Expense expense = new Expense();
 		
 		LocalDate localDate = LocalDate.now();
@@ -53,23 +68,34 @@ public class ExpenseController {
 		List<Category> listCategory = categoryService.findAll();
 		model.addAttribute("listCategory", listCategory);
 		
+		User user = userService.findByName(request.getUserPrincipal().getName());
+		model.addAttribute("userFirstName", user.getFirstName());
+		model.addAttribute("admin", AdminUser.isAdmin(user));
+		
 		return "expense_form";
 	}
 	
 	@PostMapping("/saveNewExpense")
-	public String saveNewExpense(Expense expense) {
+	public String saveNewExpense(Expense expense, HttpServletRequest request) {
+		expense.setUserid(userService.findByName(request.getUserPrincipal().getName()).getId());
 		expenseService.save(expense);
 		
 		return "redirect:/expenses";
 	}
 	
 	@GetMapping("/editExpense/{id}")
-	public String showEditExpenseForm(@PathVariable Integer id, Model model) {
+	public String showEditExpenseForm(@PathVariable Integer id, Model model, HttpServletRequest request) {
 		Expense expense = expenseService.findById(id);
 		model.addAttribute("expense", expense);
 		
 		List<Category> listCategory = categoryService.findAll();
 		model.addAttribute("listCategory", listCategory);
+		
+		User user = userService.findByName(request.getUserPrincipal().getName());
+		model.addAttribute("userFirstName", user.getFirstName());
+		model.addAttribute("admin", AdminUser.isAdmin(user));
+		
+		
 		
 		return "expense_form";
 	}

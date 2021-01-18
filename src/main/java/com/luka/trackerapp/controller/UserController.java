@@ -2,6 +2,8 @@ package com.luka.trackerapp.controller;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -9,6 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import com.luka.trackerapp.AdminUser;
 import com.luka.trackerapp.model.Role;
 import com.luka.trackerapp.model.User;
 import com.luka.trackerapp.service.RoleService;
@@ -24,11 +27,40 @@ public class UserController {
 	private RoleService roleService;
 	
 	@GetMapping("/users")
-	public String showAllUsers(Model model) {
+	public String showAllUsers(Model model, HttpServletRequest request) {
+		
 		List<User> userList = userService.findAll();
 		model.addAttribute("userList", userList);
 		
+		User user = userService.findByName(request.getUserPrincipal().getName());
+		model.addAttribute("admin", AdminUser.isAdmin(user));
+		
+		model.addAttribute("userFirstName", user.getFirstName());
+		
 		return "user";
+	}
+	
+	@GetMapping("/users/edit/{id}")
+	public String editUser(@PathVariable Integer id, Model model, HttpServletRequest request) {
+		User user = userService.findById(id);
+		model.addAttribute("user", user);
+		
+		List<Role> roleList = roleService.findAll();
+		model.addAttribute("roleList", roleList);
+		
+		User principalUser = userService.findByName(request.getUserPrincipal().getName());
+		model.addAttribute("userFirstName", principalUser.getFirstName());
+		
+		model.addAttribute("admin", AdminUser.isAdmin(principalUser));
+		
+		return "user_edit_form";
+	}
+	
+	@PostMapping("/saveEditUser")
+	public String saveEditUser(User user) {
+		userService.save(user);
+		
+		return "redirect:/users";
 	}
 	
 	@GetMapping("/users/delete/{id}")
@@ -38,12 +70,15 @@ public class UserController {
 		return "redirect:/users";
 	}
 	
-	@GetMapping("/signUp")
+	//Ovo metode ispod su za principal user-a
+	
+	
+	@GetMapping("/signup")
 	public String newUserRegistration(Model model) {
 		User user = new User();
 		model.addAttribute("user", user);
 		
-		return "user_form";
+		return "principal_form";
 	}
 	
 	@PostMapping("/saveNewUser")
@@ -55,22 +90,35 @@ public class UserController {
 		return "redirect:/users";
 	}
 	
-	@GetMapping("/users/edit/{id}")
-	public String editUser(@PathVariable Integer id, Model model) {
-		User user = userService.findById(id);
+	@GetMapping("/editmyprofile")
+	public String editMyProfilePage(Model model, HttpServletRequest request) {
+		User user = userService.findByName(request.getUserPrincipal().getName());
 		model.addAttribute("user", user);
 		
 		List<Role> roleList = roleService.findAll();
 		model.addAttribute("roleList", roleList);
 		
-		return "user_edit_form";
+		model.addAttribute("admin", AdminUser.isAdmin(user));
+		
+		return "principal_edit";
 	}
 	
-	@PostMapping("/saveEditUser")
-	public String saveEditUser(User user) {
+	@PostMapping("/savemyedit")
+	public String saveMyEdit(User user, Model model) {
+		
 		userService.save(user);
 		
-		return "redirect:/users";
+		return "redirect:/myprofile";
+	}
+	
+	@GetMapping("/myprofile")
+	public String showMyProfile(Model model, HttpServletRequest request) {
+		User user = userService.findByName(request.getUserPrincipal().getName());
+		model.addAttribute("user", user);
+		
+		model.addAttribute("admin", AdminUser.isAdmin(user));
+		
+		return "principal_profile";
 	}
 	
 }

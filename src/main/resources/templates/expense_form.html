@@ -12,10 +12,37 @@
 
   <body>
   
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  			<a class="navbar-brand" href="/home">Expense Tracker App</a>
+  			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    			<span class="navbar-toggler-icon"></span>
+  			</button>
+ 		 	<div class="collapse navbar-collapse" id="navbarNav">
+    			<ul class="navbar-nav">
+      				<li class="nav-item active">
+        				<a class="nav-link" th:href="@{/expenses}">My Expenses </a>
+     		 		</li>
+			     	<li class="nav-item">
+        				<a class="nav-link" th:if="${admin} == true" th:href="@{/users}">All Users</a>
+      				</li>
+			    </ul>
+			</div> 
+    		<div class = "navbar-nav mr-auto">
+        	<ul class = "navbar-nav mr-auto">
+            	<li class="nav-item">
+                	<a class="nav-link" th:href="@{/myprofile}">[[${userFirstName}]]</a>
+            	</li>
+            	<li class="nav-item">
+                	<a class="nav-link" th:href="@{/logout}">Logout</a>
+            	</li>
+        	</ul>
+    	</div>
+	</nav>
+    
+    
     <div class="container text-center">
     	<h1 th:if="${expense.id==null}">Add New Expense</h1>
     	<h1 th:unless="${expense.id==null}">Edit Expense</h1>
-   		<a th:href="@{/expenses}" type="button" class="btn btn-secondary btn-sm">Back</a>
    		<form class="form-inline" th:action="@{/saveNewExpense}" th:object="${expense}" method="post"
    			style="max-width: 600px; margin: 0 auto;">
    			
@@ -56,14 +83,18 @@
 			    	<select class="form-control" th:field="*{category.id}">
 			      		<option th:each="category : ${listCategory}" th:value="${category.id}" th:text="${category.name}"></option>
 			    	</select>
-			    	<a th:href="@{/newCategory}" type="button" class="btn btn-secondary btn-sm">Add New Category</a> 	
+			    	
   				</div>
+  				<div class="text-center">
+			    	<a th:href="@{/newCategory}" type="button" class="btn btn-secondary btn-sm">Add New Category</a> 	
+			    </div>
   			</div>
   			
   			<hr>
   			
   			<div>
-  				<button type="submit" class="btn btn-primary btn-lg">Save</button>
+  				<button type="submit" class="btn btn-primary">Save</button>
+  				<a th:href="@{/expenses}" class="btn btn-danger">Cancel</a>
   			</div>
    		</form>
     </div>

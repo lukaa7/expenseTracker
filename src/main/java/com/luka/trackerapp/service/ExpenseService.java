@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.luka.trackerapp.model.Expense;
+import com.luka.trackerapp.model.User;
 import com.luka.trackerapp.repository.ExpenseRepository;
 
 @Service
@@ -28,6 +29,10 @@ public class ExpenseService {
 
 	public void deleteById(Integer id) {
 		repository.deleteById(id);
+	}
+
+	public List<Expense> findByUser(User user) {
+		return repository.findByUser(user);
 	}
 	
 }
