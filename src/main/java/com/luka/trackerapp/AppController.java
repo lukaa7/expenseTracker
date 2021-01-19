@@ -39,4 +39,10 @@ public class AppController {
 		return "login";
 	}
 	
+	@GetMapping("/403")
+	public String accessDeniedPage() {
+		
+		return "403";
+	}
+	
 }

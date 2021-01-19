@@ -26,6 +26,7 @@ public class User {
 	private String username;
 	private String firstName;
 	private String lastName;
+	private boolean enabled;
 	
 	@Column(length = 50, nullable = false, unique = true)
 	private String email;
@@ -91,5 +92,11 @@ public class User {
 	public void removeRole(Role role) {
 		this.roles.remove(role);
 	}
-
+	public boolean isEnabled() {
+		return enabled;
+	}
+	public void setEnabled(boolean enabled) {
+		this.enabled = enabled;
+	}
+	
 }

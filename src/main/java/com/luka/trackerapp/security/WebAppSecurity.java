@@ -10,34 +10,48 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.password.NoOpPasswordEncoder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
+
 
 @EnableWebSecurity
 @Configuration
 public class WebAppSecurity extends WebSecurityConfigurerAdapter {
 
-	@Autowired
-	private UserDetailsService detailsService;
+	@Bean
+	public UserDetailsService userDetailsService() {
+		return new MyUserDetailsService();
+	}
 	
 	@Bean
-	public AuthenticationProvider authProvider() {
+	public BCryptPasswordEncoder passwordEncoder() {
+		return new BCryptPasswordEncoder();
+	}
+	
+	@Bean
+	public DaoAuthenticationProvider authenticationProvider() {
 		DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
-		provider.setUserDetailsService(detailsService);
-		provider.setPasswordEncoder(NoOpPasswordEncoder.getInstance());
+		provider.setUserDetailsService(userDetailsService());
+		provider.setPasswordEncoder(passwordEncoder());
 		
 		return provider;
 	}
 
-//	@Override
-//	protected void configure(HttpSecurity http) throws Exception {
-//		http
-//		.authorizeRequests()
-//		.anyRequest().authenticated()
-//		.and()
-//		.formLogin()
-//		.and()
-//		.httpBasic();
-//	}
+
+	@Override
+	protected void configure(HttpSecurity http) throws Exception {
+		http
+		.authorizeRequests()
+		.antMatchers("/users/**").hasAuthority("ADMIN")
+		.anyRequest().authenticated()
+		.and()
+		.formLogin().permitAll()
+		.and()
+		.logout().permitAll()
+		.and()
+		.exceptionHandling().accessDeniedPage("/403")
+		;
+	}
 
 	
 	

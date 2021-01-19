@@ -20,7 +20,7 @@ public class MyUserDetailsService implements UserDetailsService{
 		User user = repository.findByUsername(username);
 		
 		if(user == null) {
-			throw new UsernameNotFoundException("User Does Not Exist");
+			throw new UsernameNotFoundException("User " + username + " does not exist");
 		}
 		
 		return new PrincipalUser(user);

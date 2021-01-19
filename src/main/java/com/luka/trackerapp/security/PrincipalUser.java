@@ -1,12 +1,16 @@
 package com.luka.trackerapp.security;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
+import java.util.Set;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import com.luka.trackerapp.model.Role;
 import com.luka.trackerapp.model.User;
 
 public class PrincipalUser implements UserDetails {
@@ -20,7 +24,13 @@ public class PrincipalUser implements UserDetails {
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-		return Collections.singleton(new SimpleGrantedAuthority("USER"));
+		Set<Role> roles = user.getRoles();
+		List<SimpleGrantedAuthority> authorities = new ArrayList<>();
+		
+		for(Role role : roles) {
+			authorities.add(new SimpleGrantedAuthority(role.getRole()));
+		}
+		return authorities;
 	}
 
 	@Override
@@ -50,7 +60,7 @@ public class PrincipalUser implements UserDetails {
 
 	@Override
 	public boolean isEnabled() {
-		return true;
+		return user.isEnabled();
 	}
 	
 
