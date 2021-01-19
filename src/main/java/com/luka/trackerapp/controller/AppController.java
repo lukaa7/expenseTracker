@@ -1,4 +1,4 @@
-package com.luka.trackerapp;
+package com.luka.trackerapp.controller;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -6,7 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.luka.trackerapp.AdminUser;
 import com.luka.trackerapp.model.Role;
 import com.luka.trackerapp.model.User;
 import com.luka.trackerapp.service.UserService;
@@ -33,7 +36,7 @@ public class AppController {
 		return "home";
 	}
 	
-	@GetMapping("/login2")
+	@GetMapping("/login")
 	public String loginPage() {
 		
 		return "login";
@@ -43,6 +46,12 @@ public class AppController {
 	public String accessDeniedPage() {
 		
 		return "403";
+	}
+	
+	@RequestMapping(path = "/logout", method = {RequestMethod.GET, RequestMethod.POST})
+	public String logoutPage() {
+		
+		return "logout";
 	}
 	
 }

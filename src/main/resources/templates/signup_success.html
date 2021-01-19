@@ -3,7 +3,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 
   <head>
-    <title>Expense Tracker App</title>
+    <title>Expense Tracker Login</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <link rel="stylesheet" type="text/css" media="all" 
           href="../../css/gtvg.css" th:href="@{/css/gtvg.css}" />
@@ -12,28 +12,19 @@
 
   <body>
   
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-  			<a class="navbar-brand" href="/home">Expense Tracker App</a>
+  	<nav class="navbar navbar-expand-lg navbar-dark bg-secondary">
+  			<a class="navbar-brand" href="/">Expense Tracker App</a>
   			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
     			<span class="navbar-toggler-icon"></span>
   			</button>
- 		 	<div class="collapse navbar-collapse" id="navbarNav">
-    			<ul class="navbar-nav">
-      				<li class="nav-item active">
-        				<a class="nav-link" th:href="@{/login}">Login </a>
-     		 		</li>
-			      	<li class="nav-item">
-			        	<a class="nav-link" th:href="@{/signup}">Sing Up</a>
-			     	</li>
-			    </ul>
-			    </div>
 	</nav>
-    
-    	<div class="jumbotron text-center bg-secondary text-white">
-  			<h1 class="display-4">Welcome  To Expense Tracker App</h1>
-  			<p class="lead">Make expenses as easy to track as possible.</p>
-  			<hr class="my-4">
-		</div>
+  	
+  	<div class="container text-center">
+   		<h1 class="display-4">You have successfully signed up.</h1>
+    	<br>
+    	<h3><a th:href="@{/login}">Login</a></h3>
+    	
+    </div>
   
   </body>
 

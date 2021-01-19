@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import com.luka.trackerapp.AdminUser;
+import com.luka.trackerapp.BcryptEncoder;
 import com.luka.trackerapp.model.Role;
 import com.luka.trackerapp.model.User;
 import com.luka.trackerapp.service.RoleService;
@@ -25,6 +26,7 @@ public class UserController {
 	
 	@Autowired
 	private RoleService roleService;
+	
 	
 	@GetMapping("/users")
 	public String showAllUsers(Model model, HttpServletRequest request) {
@@ -58,6 +60,7 @@ public class UserController {
 	
 	@PostMapping("/saveEditUser")
 	public String saveEditUser(User user) {
+		user.setPassword(BcryptEncoder.encode(user.getPassword()));
 		userService.save(user);
 		
 		return "redirect:/users";
@@ -85,9 +88,11 @@ public class UserController {
 	public String saveNewUser(User user) {
 		Role role = roleService.findRoleByRole("USER");
 		user.addRole(role);
+		user.setEnabled(true);
+		user.setPassword(BcryptEncoder.encode(user.getPassword()));
 		userService.save(user);
 		
-		return "redirect:/users";
+		return "signup_success";
 	}
 	
 	@GetMapping("/editmyprofile")
@@ -105,7 +110,7 @@ public class UserController {
 	
 	@PostMapping("/savemyedit")
 	public String saveMyEdit(User user, Model model) {
-		
+		user.setPassword(BcryptEncoder.encode(user.getPassword()));
 		userService.save(user);
 		
 		return "redirect:/myprofile";
