@@ -10,6 +10,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.luka.trackerapp.AdminUser;
 import com.luka.trackerapp.BcryptEncoder;
@@ -69,6 +71,19 @@ public class UserController {
 	@GetMapping("/users/delete/{id}")
 	public String deleteUser(@PathVariable Integer id) {
 		userService.deleteById(id);
+		
+		return "redirect:/users";
+	}
+	
+	@RequestMapping(path = "/users/enable/{id}", method = {RequestMethod.GET, RequestMethod.POST})
+	public String enabledUser(@PathVariable Integer id) {
+		User user = userService.findById(id);
+		if(user.isEnabled()) {
+			user.setEnabled(false);
+		} else {
+			user.setEnabled(true);
+		}
+		userService.save(user);
 		
 		return "redirect:/users";
 	}

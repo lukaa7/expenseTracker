@@ -71,6 +71,8 @@
     				<td>
     					<a th:href="@{'/users/edit/' + ${user.id}}" class="btn btn-primary btn-sm">Edit</a>
     					<a th:href="@{'/users/delete/' + ${user.id}}" class="btn btn-danger btn-sm">Delete</a>
+    					<a th:unless="${user.enabled==true}" th:href="@{'/users/enable/' + ${user.id}}" class="btn btn-warning btn-sm">Enable</a>
+    					<a th:if="${user.enabled==true}" th:href="@{'/users/enable/' + ${user.id}}" class="btn btn-info btn-sm">Disable</a>
     				</td>
     			</tr>
     		</tbody>
