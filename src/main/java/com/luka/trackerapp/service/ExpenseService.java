@@ -34,5 +34,13 @@ public class ExpenseService {
 	public List<Expense> findByUser(User user) {
 		return repository.findByUser(user);
 	}
+
+	public double getTotalSum(List<Expense> expenseList) {
+		double totalSum = 0;
+		for(Expense e : expenseList) {
+			totalSum += e.getPrice();
+		}
+		return Math.round(totalSum * 100.0) / 100.0;
+	}
 	
 }

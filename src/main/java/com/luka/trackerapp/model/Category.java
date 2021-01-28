@@ -13,6 +13,14 @@ public class Category {
 	private Integer id;
 	private String name;
 	
+	public Category() {
+		
+	}
+	
+	public Category(String name) {
+		this.name = name;
+	}
+	
 	public Integer getId() {
 		return id;
 	}

@@ -88,7 +88,7 @@ public class UserController {
 		return "redirect:/users";
 	}
 	
-	//Ovo metode ispod su za principal user-a
+	//Principal user
 	
 	
 	@GetMapping("/signup")

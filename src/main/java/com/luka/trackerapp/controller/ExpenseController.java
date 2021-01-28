@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import com.luka.trackerapp.AdminUser;
 import com.luka.trackerapp.model.Category;
 import com.luka.trackerapp.model.Expense;
-import com.luka.trackerapp.model.Role;
 import com.luka.trackerapp.model.User;
 import com.luka.trackerapp.service.CategoryService;
 import com.luka.trackerapp.service.ExpenseService;
@@ -44,12 +43,7 @@ public class ExpenseController {
 		List<Expense> expenseList = expenseService.findByUser(user);
 		model.addAttribute("expenseList", expenseList);
 		
-		double totalSum = 0;
-		for(Expense e : expenseList) {
-			totalSum += e.getPrice();
-		}
-		totalSum = Math.round(totalSum * 100.0) / 100.0;
-		model.addAttribute("totalSum", totalSum);
+		model.addAttribute("totalSum", expenseService.getTotalSum(expenseList));
 		
 		model.addAttribute("admin", AdminUser.isAdmin(user));
 		model.addAttribute("userFirstName", user.getFirstName());
