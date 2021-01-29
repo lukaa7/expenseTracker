@@ -37,7 +37,6 @@ public class ExpenseController {
 	
 	@GetMapping("/expenses")
 	public String expensePage(Model model, HttpServletRequest request) {
-		
 		User user = userService.findByName(request.getUserPrincipal().getName());
 		
 		List<Expense> expenseList = expenseService.findByUser(user);
@@ -88,8 +87,6 @@ public class ExpenseController {
 		User user = userService.findByName(request.getUserPrincipal().getName());
 		model.addAttribute("userFirstName", user.getFirstName());
 		model.addAttribute("admin", AdminUser.isAdmin(user));
-		
-		
 		
 		return "expense_form";
 	}

@@ -10,8 +10,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.luka.trackerapp.AdminUser;
 import com.luka.trackerapp.BcryptEncoder;
@@ -88,6 +90,21 @@ public class UserController {
 		return "redirect:/users";
 	}
 	
+	@GetMapping("/users/search")
+	public String searchForUsers(@RequestParam String keyword, Model model, HttpServletRequest request) {
+		List<User> searchedUser = userService.searchUsers(keyword);
+	
+		model.addAttribute("searchedUser", searchedUser);
+		model.addAttribute("keyword", keyword);
+		
+		User principalUser = userService.findByName(request.getUserPrincipal().getName());
+		model.addAttribute("userFirstName", principalUser.getFirstName());
+		
+		model.addAttribute("admin", AdminUser.isAdmin(principalUser));
+		
+		return "user_search";
+	}
+	
 	//Principal user
 	
 	
@@ -140,5 +157,6 @@ public class UserController {
 		
 		return "principal_profile";
 	}
+	
 	
 }

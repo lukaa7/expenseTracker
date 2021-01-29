@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 import com.luka.trackerapp.model.User;
 import com.luka.trackerapp.repository.UserRepository;
 
+import jdk.jshell.spi.ExecutionControl.UserException;
+
 @Service
 public class UserService {
 
@@ -32,6 +34,10 @@ public class UserService {
 
 	public User findByName(String name) {
 		return repository.findByUsername(name);
+	}
+	
+	public List<User> searchUsers(String keyword) {
+		return repository.searchUser(keyword);
 	}
 	
 }

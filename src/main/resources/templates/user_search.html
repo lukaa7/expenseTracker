@@ -45,18 +45,12 @@
   <div class="container text-center">
   	
   	<div class="jumbotron">
-	  <h1 class="display-4">All Users</h1>
+	  <h1 class="display-4">Search Result: [[${keyword}]]</h1>
 	  <hr class="my-4">
 	</div>
-  		
-    <form class="form-inline"
-  		style="max-width: 600px; margin: 0 auto;" method="get" th:action="@{/users/search}">
- 		<input class="form-control mr-sm-2" type="text" name="keyword" placeholder="Search Users" aria-label="Search">
-    	<button class="btn btn-outline-primary my-2 my-sm-0" type="submit">Search</button>
-  </form>
     
     <div class="text-center">
-  
+  	<a th:href="@{/users}" class="btn btn-primary">Back</a>
   
     	<table class="table table-striped">
     		<thead>
@@ -70,7 +64,7 @@
 	    		</tr>
     		</thead>
     		<tbody>
-    			<tr th:each="user : ${userList}">
+    			<tr th:each="user : ${searchedUser}">
     				<td th:text="${user.id}"></td>
     				<td th:text="${user.username}"></td>
     				<td th:text="${user.firstName}"></td>
