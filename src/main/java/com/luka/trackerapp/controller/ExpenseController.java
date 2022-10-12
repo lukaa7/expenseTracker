@@ -44,7 +44,7 @@ public class ExpenseController {
 				@Param("keyword") String keyword) {
 		User user = userService.findByName(request.getUserPrincipal().getName());
 		
-		List<Expense> expenseList = expenseService.findAllExpenses(user, keyword);
+		List<Expense> expenseList = expenseService.findAllExpenses(user.getId(), keyword);
 		model.addAttribute("keqword", keyword);
 		
 		

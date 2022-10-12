@@ -1,6 +1,7 @@
 package com.luka.trackerapp.model;
 
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -98,5 +99,18 @@ public class User {
 	public void setEnabled(boolean enabled) {
 		this.enabled = enabled;
 	}
+	@Override
+	public int hashCode() {
+		return Objects.hash(username);
+	}
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == null)
+			return false;
+		User other = (User) obj;
+		return this.username == other.username;
+	}
+	
+	
 	
 }

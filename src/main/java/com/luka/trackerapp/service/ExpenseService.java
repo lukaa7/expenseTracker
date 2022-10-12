@@ -37,15 +37,9 @@ public class ExpenseService {
 		repository.deleteById(id);
 	}
 
-	public List<Expense> findAllExpenses(User user, String keyword) {
-		List<Expense> allUserExpenses = repository.findByUser(user);
-		if(keyword != null) {
-			List<Expense> findByDetails = repository.findByDetails(keyword);
-			if(allUserExpenses.retainAll(findByDetails)) {
-				return findByDetails;
-			}
-		}
-		return repository.findByUser(user);
+	public List<Expense> findAllExpenses(Integer userId, String keyword) {
+			return repository.findByDetailsAndUser(userId, keyword != null ? keyword : "");
+
 	}
 
 	public double getTotalSum(List<Expense> expenseList) {

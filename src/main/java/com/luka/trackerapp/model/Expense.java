@@ -74,5 +74,8 @@ public class Expense {
 	public void setDate(String date) {
 		this.date = date;
 	}
+	public String getUsername() {
+		return this.user.getUsername();
+	}
 
 }
