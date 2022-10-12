@@ -7,6 +7,8 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -35,11 +37,18 @@ public class ExpenseController {
 	@Autowired
 	private UserService userService;
 	
+	
 	@GetMapping("/expenses")
-	public String expensePage(Model model, HttpServletRequest request) {
+	public String expensePage(Model model,
+				HttpServletRequest request,
+				@Param("keyword") String keyword) {
 		User user = userService.findByName(request.getUserPrincipal().getName());
 		
-		List<Expense> expenseList = expenseService.findByUser(user);
+		List<Expense> expenseList = expenseService.findAllExpenses(user, keyword);
+		model.addAttribute("keqword", keyword);
+		
+		
+		
 		model.addAttribute("expenseList", expenseList);
 		
 		model.addAttribute("totalSum", expenseService.getTotalSum(expenseList));

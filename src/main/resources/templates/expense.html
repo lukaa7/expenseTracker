@@ -53,6 +53,16 @@
 	  <p class="lead">
 	    <a class="btn btn-secondary btn-lg" th:href="@{/addExpense}" role="button">Add New Expense</a>
 	  </p>
+	  <div align="right">
+	  	<form th:action="@{/expenses}">
+	  		<input type="text" name="keyword" 
+	  		placeholder="Search by description"
+	  		required
+	  		th:value="${keqword}">
+	  		<input type="submit" value="Search">
+	  		<input type="button" value="Clear" onclick="clearFilter()">
+	  	</form>
+	  </div>
 	</div>
   		
     <div>
@@ -79,8 +89,16 @@
     			</tr>
     		</tbody>
     	</table>
+    	
+    	
+    	
     </div>
-    </div>	
+    </div>
+    <script type="text/javascript">
+    	function clearFilter() {
+			window.location = "/expenses"
+		}
+    </script>	
   </body>
 
 </html>

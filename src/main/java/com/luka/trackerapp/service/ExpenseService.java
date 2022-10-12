@@ -3,6 +3,10 @@ package com.luka.trackerapp.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.luka.trackerapp.model.Expense;
@@ -15,10 +19,12 @@ public class ExpenseService {
 	@Autowired
 	private ExpenseRepository repository;
 
-	public List<Expense> findAll() {
-		return repository.findAll();
-	}
 
+	public Page<Expense> findPage(int pageNumber) {
+		Pageable pageable = PageRequest.of(pageNumber-1, 5);
+		return repository.findAll(pageable);
+	}
+	
 	public void save(Expense expense) {
 		repository.save(expense);
 	}
@@ -31,7 +37,14 @@ public class ExpenseService {
 		repository.deleteById(id);
 	}
 
-	public List<Expense> findByUser(User user) {
+	public List<Expense> findAllExpenses(User user, String keyword) {
+		List<Expense> allUserExpenses = repository.findByUser(user);
+		if(keyword != null) {
+			List<Expense> findByDetails = repository.findByDetails(keyword);
+			if(allUserExpenses.retainAll(findByDetails)) {
+				return findByDetails;
+			}
+		}
 		return repository.findByUser(user);
 	}
 
