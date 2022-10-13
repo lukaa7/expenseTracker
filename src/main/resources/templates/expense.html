@@ -54,7 +54,7 @@
 	    <a class="btn btn-secondary btn-lg" th:href="@{/addExpense}" role="button">Add New Expense</a>
 	  </p>
 	  <div align="right">
-	  	<form th:action="@{/expenses}">
+	  	<form th:action="@{'/expenses'}">
 	  		<input type="text" name="keyword" 
 	  		placeholder="Search by description"
 	  		required
@@ -90,7 +90,13 @@
     		</tbody>
     	</table>
     	
-    	
+    	<footer style="font-size: large" class="pagination pagination-lg">
+    		&nbsp; &nbsp; &nbsp;
+    		<span th:each="i: ${#numbers.sequence(1, totalPages)}">
+        		<a class="page-link" th:href="@{'/expenses/page/' + ${i}}">[[${i}]]</a>
+        		&nbsp; &nbsp;
+    		</span>
+		</footer>
     	
     </div>
     </div>

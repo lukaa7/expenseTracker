@@ -17,6 +17,9 @@ public interface ExpenseRepository extends JpaRepository<Expense, Integer> {
 
 	@Query(value = "SELECT e FROM Expense e WHERE e.userid = :usrid "
 			+ "AND lower(e.details) LIKE  %:keyword%")
-	List<Expense> findByDetailsAndUser(@Param("usrid") Integer userId, @Param("keyword") String keyword);
+	Page<Expense> findByDetailsAndUser(@Param("usrid") Integer userId, @Param("keyword") String keyword, Pageable pageable);
+	
+	@Query(value = "SELECT e FROM Expense e WHERE e.userid = :usrid ")
+	List<Expense> findByTotalSum(@Param("usrid") Integer userId);
 	
 }

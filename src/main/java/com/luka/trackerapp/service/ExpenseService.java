@@ -37,14 +37,16 @@ public class ExpenseService {
 		repository.deleteById(id);
 	}
 
-	public List<Expense> findAllExpenses(Integer userId, String keyword) {
-			return repository.findByDetailsAndUser(userId, keyword != null ? keyword : "");
+	public Page<Expense> findAllExpenses(Integer userId, String keyword, int pageNumber) {
+		Pageable pageable = PageRequest.of(pageNumber-1, 5);
+		//return repository.findByDetailsAndUser(userId, keyword != null ? keyword : "");
+		return repository.findByDetailsAndUser(userId, keyword != null ? keyword : "", pageable);
 
 	}
 
-	public double getTotalSum(List<Expense> expenseList) {
+	public double getTotalSum(int userId) {
 		double totalSum = 0;
-		for(Expense e : expenseList) {
+		for(Expense e : repository.findByTotalSum(userId)) {
 			totalSum += e.getPrice();
 		}
 		return Math.round(totalSum * 100.0) / 100.0;

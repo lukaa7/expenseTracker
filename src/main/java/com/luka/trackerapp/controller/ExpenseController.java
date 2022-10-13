@@ -39,19 +39,36 @@ public class ExpenseController {
 	
 	
 	@GetMapping("/expenses")
-	public String expensePage(Model model,
+	public String expenseIndexPage(Model model,
 				HttpServletRequest request,
 				@Param("keyword") String keyword) {
+		
+		return expensePage(model, request,keyword, 1);
+	}
+	
+	@GetMapping("/expenses/page/{pageNumber}")
+	public String expensePage(Model model,
+				HttpServletRequest request,
+				@Param("keyword") String keyword,
+				@PathVariable("pageNumber") int currentPage) {
 		User user = userService.findByName(request.getUserPrincipal().getName());
 		
-		List<Expense> expenseList = expenseService.findAllExpenses(user.getId(), keyword);
+		Page<Expense> expenseList = expenseService.findAllExpenses(user.getId(), keyword, currentPage);
+		
+		List<Expense> pageList = expenseList.getContent();
+		
+		
 		model.addAttribute("keqword", keyword);
 		
+		model.addAttribute("currentPage", currentPage);
+		model.addAttribute("totalPages", expenseList.getTotalPages());
+		model.addAttribute("totalItems", expenseList.getTotalElements());
+		model.addAttribute("expenseList", pageList);
 		
 		
-		model.addAttribute("expenseList", expenseList);
+	//	model.addAttribute("expenseList", expenseList);
 		
-		model.addAttribute("totalSum", expenseService.getTotalSum(expenseList));
+		model.addAttribute("totalSum", expenseService.getTotalSum(user.getId()));
 		
 		model.addAttribute("admin", AdminUser.isAdmin(user));
 		model.addAttribute("userFirstName", user.getFirstName());
